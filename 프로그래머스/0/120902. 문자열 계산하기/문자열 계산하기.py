@@ -1,18 +1,16 @@
 def solution(my_string):
-    tmp=my_string.split()
-    ans = 0
-    ans+=int(tmp[0])
-    for i in range(1,len(tmp)+1):
-        if i != len(tmp):
-            if tmp[i]=='+':
-                ans+=int(tmp[i+1])
-            elif tmp[i]=='-':
-                ans-=int(tmp[i+1])
+    operator="+,-"
+    ans=0
+    op=''
+    for i in my_string.split():
+        if i in operator:
+            op = i
+        else:
+            if op=='+':
+                ans+=int(i)
+            elif op=='-':
+                ans-=int(i)
             else:
-                continue
+                ans=int(i)
     return ans
-            
-            
-            
-            
-    return answer
+        
