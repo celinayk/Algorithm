@@ -1,4 +1,2 @@
 def solution(array):
-    array = map(str, array)
-    combined_str = "".join(array)
-    return combined_str.count('7')
+    return sum(str(i).count("7")for i in array)
