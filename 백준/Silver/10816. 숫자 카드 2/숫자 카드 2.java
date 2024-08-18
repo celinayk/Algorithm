@@ -15,61 +15,42 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
 		
 		int n = Integer.parseInt(br.readLine());	
-		int arr[] = new int[n];
+		HashMap<Integer, Integer> map = new HashMap<>();
+		
 		
 		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
+            int num = Integer.parseInt(st.nextToken());
+            
+            if(!map.containsKey(num)) {
+            	map.put(num, 1);
+            }
+            else {
+            	map.put(num, map.get(num)+1);
+            }
         }
 		
-		Arrays.sort(arr);
 		
 		int m = Integer.parseInt(br.readLine());
-		
 		st = new StringTokenizer(br.readLine(), " ");
-		StringBuilder sb = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		
 		for(int i=0; i<m; i++) {
 			int k = Integer.parseInt(st.nextToken());
-			sb.append(upperBound(arr,k) - lowerBound(arr,k)).append(" ");
+			if(map.containsKey(k)) {
+				sb.append(map.get(k)+ " ");
+			}
+			else {
+				sb.append(0+ " ");
+			}
 			
 		}
 		
 		System.out.println(sb);
 	}
 
-	private static int lowerBound(int[] arr, int k) {
-		int low = 0;
-		int high = arr.length;
-		
-		while(low<high) {
-			int mid= (low+high)/2;
-			if(arr[mid]>=k) { //k값이 중간위치 보다 같거나 작으면
-				high = mid; //범위를 왼쪽으로 탐색해야하니까 high를 줄인다
-			}
-			else {
-				low = mid +1;
-			}
-		}
-		return low;
-	}
 
-	private static int upperBound(int[] arr, int k) {
-		int low = 0;
-        int high = arr.length;
 
-        while(low<high) {
-        	int mid= (low+high)/2;
-        	if(arr[mid]>k) { //k값이 중간위치보다 작으면
-        		high = mid; //작는 범위
-        	}
-        	else {
-        		low=mid+1;
-        	}
-        			
-        }
-        return low;
 	}
-}
 
 
