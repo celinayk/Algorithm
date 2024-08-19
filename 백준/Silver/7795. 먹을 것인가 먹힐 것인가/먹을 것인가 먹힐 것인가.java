@@ -39,30 +39,23 @@ public class Main {
             
             
             int ans=0;
-            for(int j=0; j<brr.length; j++) {
-            	ans+=((arr.length)-upperbound(arr,brr[j]));
-            	
+            int a = 0;
+            int b = 0;
+            while(true) {
+            	if(a==n || b==m) break;
+            	if(arr[a]>brr[b]) {
+            		ans+=n - a;
+            		b++;
+            	}
+            	else {
+            		a++;
+            	}
             }
-            System.out.println(ans);
-          
+           System.out.println(ans);
         }
     }
 
-	private static int upperbound(int[] arr, int brr) {
-		int low = 0;
-		int high = arr.length;
-		
-		while(low<high) {
-			int mid = (low+high)/2;
-			if(arr[mid]>brr) {
-				high = mid;
-			}
-			else {
-				low = mid+1;
-			}
-		}
-		return low;
-	}
+
 }
 
 
