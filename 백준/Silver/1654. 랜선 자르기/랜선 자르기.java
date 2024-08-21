@@ -12,36 +12,48 @@ import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-    	 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    	   StringTokenizer st = new StringTokenizer(in.readLine());
-    	 
-    	   int K = Integer.parseInt(st.nextToken());
-    	   int N = Integer.parseInt(st.nextToken());
-    	 
-    	   int[] lines = new int[K];
-    	   for (int i = 0; i < K; i++) lines[i] = Integer.parseInt(in.readLine());
-    	 
-    	   Arrays.sort(lines);
-    	 
-    	   long right = lines[K-1];
-    	   long left = 1;
-    	   long count, half;
-    	 
-    	   while(left<=right) {
-    	      count = 0;
-    	      half=(left+right)/2;
-    	 
-    	      for(int i=0;i<K;i++) count += lines[i]/half;
-    	 
-    	      if(count<N) right = half-1;
-    	      else left = half+1;
-    	   }
-    	 
-    	   System.out.println(right);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
+        
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        int k = Integer.parseInt(st.nextToken());  
+        int n = Integer.parseInt(st.nextToken());  
+        int arr[] = new int[k];
+ 
+        long high = 0;
+        
+        for(int i=0; i<k; i++) {
+        	arr[i] = Integer.parseInt(br.readLine());
+        	if(high<arr[i]) {
+        		high = arr[i];
+        	}
+        }
+        
+        long low = 1;
+        
+        while(low<=high) {
+        	long mid = (low+high)/2;
+        	long cnt=0;
+        	
+        	//현재 길이로 만들 수 있는 랜선의 길이
+        	for(int i=0; i<arr.length; i++) {
+        		cnt+=(arr[i]/mid);
+        	}
+        	// 랜선의 개수가 n보다 작으면(길이가 답보다 길어서 그런거임)
+        	// 더 많은 랜선을 만들어야함 
+        	// 왼쪽을 탐색해야함 
+        	if(cnt<n) { 
+        		high = mid-1;
+        	}
+        	//랜선의 개수가 n보다 많다(길이가 답보다 짧으니까 늘려야함)
+        	//오른쪽 탐색 
+        	else {
+        		low = mid+1;
+        	}
+        		
+        }
+        System.out.println(high);
     }
 }
-
-
 
 
 
