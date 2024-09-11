@@ -40,35 +40,29 @@ public class Main {
         	}
         }
         
-        List<Integer> li = new ArrayList<>();
-        int total=0;
         
+        
+        int cnt=0;
         for(int i=0; i<n; i++) {
         	for(int j=0; j<n; j++) {
         		if(arr[i][j]==0 && !isVisited[i][j]) {
         			int region = dfs(i,j);
-        			li.add(region);
-        			total+=region;
+        			cnt+=(region+k-1)/k;
         		}
         		
         	}
         }
-        if(total ==0) {
+        if(cnt==0) {
         	System.out.println("IMPOSSIBLE");
-        	return;
-        }
-        
-        int ans = 0;
-        for(int i : li) {
-        	ans+=(i+k-1)/k;
-        }
-        
-        if(ans<m) {
-        	System.out.println("POSSIBLE");
-        	System.out.println(m-ans);
         }
         else {
-        	System.out.println("IMPOSSIBLE");
+        	if(cnt<=m) {
+        		System.out.println("POSSIBLE");
+        		System.out.println(m-cnt);
+        	}
+        	else {
+        		System.out.println("IMPOSSIBLE");
+        	}
         }
        
         
