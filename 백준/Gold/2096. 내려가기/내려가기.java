@@ -22,50 +22,34 @@ public class Main {
         
         int n = Integer.parseInt(br.readLine());
         
-        int dp[][] = new int[n+1][3];
-        int arr[][] = new int[n+1][3];
+        int max_dp[][] = new int[n+1][3];
+        int min_dp[][] = new int[n+1][3];
+        
         
         StringTokenizer st;
         for(int i=1; i<=n; i++) {
            st = new StringTokenizer(br.readLine());
-           for(int j=0; j<3; j++) {
-        	   arr[i][j] = Integer.parseInt(st.nextToken());
-           }         
+           
+           int a = Integer.parseInt(st.nextToken());
+           int b = Integer.parseInt(st.nextToken());
+           int c = Integer.parseInt(st.nextToken());
+           
+           //최대값 구하기 
+           max_dp[i][0] = Math.max(max_dp[i-1][0], max_dp[i-1][1])+a;
+           max_dp[i][1] = Math.max(max_dp[i-1][0], Math.max(max_dp[i-1][1], max_dp[i-1][2]))+b;
+           max_dp[i][2] = Math.max(max_dp[i-1][2], max_dp[i-1][1])+c;
+           
+           //최소값 구하기 
+           min_dp[i][0] = Math.min(min_dp[i-1][0], min_dp[i-1][1])+a;
+           min_dp[i][1] = Math.min(min_dp[i-1][0], Math.min(min_dp[i-1][1], min_dp[i-1][2]))+b;
+           min_dp[i][2] = Math.min(min_dp[i-1][2], min_dp[i-1][1])+c;
         }
         
-        for(int i=1; i<=n; i++) {
-        	for(int j=0; j<3; j++) {
-        		if(j==0) {
-        			dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1])+arr[i][0];
-        		}
-        		else if(j==1) {
-        			dp[i][1] = Math.max(dp[i-1][0], Math.max(dp[i-1][1], dp[i-1][2]))+arr[i][1];
-        		}
-        		else {
-        			dp[i][2] = Math.max(dp[i-1][2], dp[i-1][1])+arr[i][2];
-        		}
-        	}
-        }
+        int maxx = Math.max(max_dp[n][0], Math.max(max_dp[n][1], max_dp[n][2]));
+        int minn = Math.min(min_dp[n][0], Math.min(min_dp[n][1], min_dp[n][2]));
+        System.out.println(maxx + " "+ minn);
         
-        int a = Math.max(dp[n][0], Math.max(dp[n][1], dp[n][2]));
         
-        for(int i=1; i<=n; i++) {
-        	for(int j=0; j<3; j++) {
-        		if(j==0) {
-        			dp[i][0] = Math.min(dp[i-1][0], dp[i-1][1])+arr[i][0];
-        		}
-        		else if(j==1) {
-        			dp[i][1] = Math.min(dp[i-1][0], Math.min(dp[i-1][1], dp[i-1][2]))+arr[i][1];
-        		}
-        		else {
-        			dp[i][2] = Math.min(dp[i-1][2], dp[i-1][1])+arr[i][2];
-        		}
-        	}
-        }
-        
-        int b = Math.min(dp[n][0], Math.min(dp[n][1], dp[n][2]));
-        
-        System.out.println(a + " " + b);
         
    
       
