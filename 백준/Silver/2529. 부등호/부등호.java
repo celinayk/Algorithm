@@ -39,7 +39,7 @@ public class Main {
 	        
 	        
 	        backtrack("", 0);
-	        Collections.sort(ans);
+	        //Collections.sort(ans);
 	        System.out.println(ans.get(ans.size()-1));
 	        System.out.println(ans.get(0));
 	}
