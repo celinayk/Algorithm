@@ -1,184 +1,99 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 public class Main {
-
-	static boolean[][] isVisited;
-	static int[][] arr;
+	static char[][] arr;
+	static boolean[][] visited;
+	static int dx[] = {-1,1,0,0};
+	static int dy[] = {0,0,-1,1};
 	static int n;
-	static int[] dx = {-1,1,0,0};
-	static int[] dy = {0,0,-1,1};
-	
-
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-   
-        arr = new int[n][n];
-        isVisited = new boolean[n][n];
+        n = Integer.parseInt(br.readLine());
+        arr = new char[n][n];
+        visited = new boolean[n][n];
         
+ 
         for(int i=0; i<n; i++) {
         	String line = br.readLine();
         	for(int j=0; j<n; j++) {
-        		char ch = line.charAt(j);
-        		if (ch == 'R') {
-                    arr[i][j] = 0;
-                } else if (ch == 'G') {
-                    arr[i][j] = 1;
-                } else if (ch == 'B') {
-                    arr[i][j] = 2;
-                }
+        		arr[i][j] = line.charAt(j);
         	}
         }
         
-        
-        
-        int red=0;
-        int green=0;
-        int blue=0;
-        
-        for(int i=0; i<n; i++) {
-        	for(int j=0; j<n; j++ ) {
-        		if(arr[i][j]==0&& !isVisited[i][j]) {
-        			dfs0(i,j);
-        			red++;
-        		}     		
-        	}
-        }
-        
-        for(int i=0; i<n; i++) {
-        	for(int j=0; j<n; j++ ) {
-        		if(arr[i][j]==1&& !isVisited[i][j]) {
-        			dfs1(i,j);
-        			green++;
-        		}     		
-        	}
-        }
-        
-        for(int i=0; i<n; i++) {
-        	for(int j=0; j<n; j++ ) {
-        		if(arr[i][j]==2&& !isVisited[i][j]) {
-        			dfs2(i,j);
-        			blue++;
-        		}     		
-        	}
-        }
-        
-        int cnt1=0;
-        cnt1=red+green+blue;
-        
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(isVisited[i], false);
-        }
-        
+        StringBuilder sb = new StringBuilder();
+        int cnt=0;
         for(int i=0; i<n; i++) {
         	for(int j=0; j<n; j++) {
-        		if (arr[i][j] == 1) {
-                    arr[i][j] = 0;
-                } 
+        		if(!visited[i][j]) {
+        			dfs(i,j);
+        			cnt++;
+        		}
         	}
         }
+        sb.append(cnt);
+        sb.append(" ");
         
-        red=0;
+        visited = new boolean[n][n];
         for(int i=0; i<n; i++) {
-        	for(int j=0; j<n; j++ ) {
-        		if(arr[i][j]==0&& !isVisited[i][j]) {
-        			dfs0(i,j);
-        			red++;
-        		}     		
+        	for(int j=0; j<n; j++) {
+        		if(arr[i][j]=='G') {
+        			arr[i][j] = 'R';
+        		}
         	}
         }
         
-        blue=0;
+        int cnt2=0;
         for(int i=0; i<n; i++) {
-        	for(int j=0; j<n; j++ ) {
-        		if(arr[i][j]==2&& !isVisited[i][j]) {
-        			dfs2(i,j);
-        			blue++;
-        		}     		
+        	for(int j=0; j<n; j++) {
+        		if(!visited[i][j]) {
+        			dfs(i,j);
+        			cnt2++;
+        		}
         	}
         }
+        sb.append(cnt2);
+        System.out.println(sb);
         
-        int cnt2= 0;
-        cnt2=red+blue;
-        
-        System.out.println(cnt1+ " "+ cnt2);
-       
-       
         
     }
 
-
-	private static void dfs0(int x, int y) {
-
-		isVisited[x][y] = true;
+	private static void dfs(int x, int y) {
+		visited[x][y] = true;
+		char now = arr[x][y];
 		
 		for(int i=0; i<4; i++) {
-			int nx = x+dx[i];
-			int ny = y+dy[i];
+			int nx = dx[i] + x;
+			int ny = dy[i] + y;
 			
-			if(nx>=0 && ny>=0 && nx < n && ny < n) {
-				if(arr[nx][ny]==0 && !isVisited[nx][ny]) {
-					dfs0(nx,ny);
+			if(nx<n && ny<n && nx>=0 && ny>=0) {
+				if(!visited[nx][ny]) {
+					if(arr[nx][ny]==now) {
+						dfs(nx,ny);
+					}
 				}
-				
 			}
-			
-			
 		}
 		
-	}	
-	private static void dfs1(int x, int y) {
-
-		isVisited[x][y] = true;
-		
-		for(int i=0; i<4; i++) {
-			int nx = x+dx[i];
-			int ny = y+dy[i];
-			
-			if(nx>=0 && ny>=0 && nx < n && ny < n) {
-				if(arr[nx][ny]==1 && !isVisited[nx][ny]) {
-					dfs1(nx,ny);
-				}
-				
-			}
-			
-			
-		}
-		
-	}	
-	private static void dfs2(int x, int y) {
-
-		isVisited[x][y] = true;
-		
-		for(int i=0; i<4; i++) {
-			int nx = x+dx[i];
-			int ny = y+dy[i];
-			
-			if(nx>=0 && ny>=0 && nx < n && ny < n) {
-				if(arr[nx][ny]==2 && !isVisited[nx][ny]) {
-					dfs2(nx,ny);
-				}
-				
-			}
-			
-			
-		}
-		
-	}	
+	}
+	
 }
 
