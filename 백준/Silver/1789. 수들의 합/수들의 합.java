@@ -8,10 +8,7 @@ public class Main {
         
         long sum=0;
         
-        if(s==1||s==2) {
-        	System.out.println(1);
-        	return;
-        }
+        
         for(int i=1; i<=s; i++) {
         	sum+=i;
         	if(sum>s) {
