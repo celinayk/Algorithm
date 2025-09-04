@@ -6,60 +6,63 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Main {
-	static int[] arr;
-	static int F,S,G,U,D;
-	static boolean[] visited;
+    static boolean[] visited;
+    static int[] arr;
+    static int f,s,g,u,d;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        F = Integer.parseInt(st.nextToken());
-        S = Integer.parseInt(st.nextToken());
-        G = Integer.parseInt(st.nextToken());
-        U = Integer.parseInt(st.nextToken());
-        D = Integer.parseInt(st.nextToken());
-        
-        arr = new int[F+1];
-        visited = new boolean[F+1];
-        
+        StringTokenizer st =  new StringTokenizer(br.readLine());
+
+        f = Integer.parseInt(st.nextToken());
+        s = Integer.parseInt(st.nextToken());
+        g = Integer.parseInt(st.nextToken());
+        u = Integer.parseInt(st.nextToken());
+        d = Integer.parseInt(st.nextToken());
+
+        arr = new int[1000001];
+        visited = new boolean[1000001];
+
         int ans=bfs();
         if(ans==-1) {
-        	System.out.println("use the stairs");
+            System.out.println("use the stairs");
         }
         else {
-        	System.out.println(ans);
+            System.out.println(ans);
         }
-        
+
     }
-	private static int bfs() {
-		Queue<int[]>q = new LinkedList<>();
-		q.add(new int[] {S, 0}); //현재위치와 점프횟수
-		visited[S] = true;
-		
-		while(!q.isEmpty()) {
-			int []tmp = q.poll();
-			int now =tmp[0]; // 현재 엘베가 위치하는 층 
-			int cnt =tmp[1]; //점프 횟수 
-			
-			if(now==G) {
-				return cnt;
-			}
-			
-			//위로 이동
-			int up = now+U;
-			if(up<=F && !visited[up]) {
-				visited[up] = true;
-				q.add(new int[] {up,cnt+1});
-			}
-			
-			int down = now-D;
-			if(down>=1 && !visited[down]) {
-				visited[down] = true;
-				q.add(new int[] {down, cnt+1});
-			}
-			
-		}
-		return -1;
-	}	
+
+    private static int bfs() {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{s, 0});
+        visited[s] = true;
+
+        while(!q.isEmpty()) {
+            int[] now = q.poll(); // 현재 위치
+            int cur = now[0];
+            int cnt = now[1];
+
+            if(cur==g) {
+                return cnt;
+            }
+
+            // 올라가는 경우
+            // 해당층을 방문하지 않았고 f를 초과하지 않음
+            if(cur+u<=f && !visited[cur+u]) {
+                q.offer(new int[]{cur+u, cnt+1});
+                visited[cur+u] = true;
+            }
+            //내려가는 경우
+            if(cur-d>0 && !visited[cur-d]) {
+                q.offer(new int[]{cur-d, cnt+1});
+                visited[cur-d] = true;
+            }
+
+        }
+
+        return -1;
+    }
+
+
 }
 
