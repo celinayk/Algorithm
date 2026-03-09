@@ -1,63 +1,54 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 
 public class Main {
-	static int n, m;
-	static boolean[] isVisited;
-	static int[][]  adjMatrix;
-	static int cnt=0;
+    static int n,m;
+    static boolean[] visited;
+    static LinkedList<Integer>[] adj;
+    static int cnt = 0;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
-             
-        
-        n = Integer.parseInt(br.readLine());
-        m = Integer.parseInt(br.readLine());
-        
-        isVisited = new boolean[n+1];
-        adjMatrix = new int[n+1][n+1];
-        
-    
-		
-        // 간선 입력받기
-        // 두 노드 사이에 여러개의 간선이 있을 수 있다
-        // 양방향 연결이다 
-        for(int i=0; i<m; i++) {
-        	 StringTokenizer st = new StringTokenizer(br.readLine());
-        	 int u = Integer.parseInt(st.nextToken());
-        	 int v = Integer.parseInt(st.nextToken());
-        	 
-        	 adjMatrix[u][v] = adjMatrix[v][u] = 1;
+        n = Integer.parseInt(br.readLine()); //컴퓨터의 수
+        m = Integer.parseInt(br.readLine()); //네트워크 상에서 직접 연결되어 있는 컴퓨터 쌍의 수
+
+        visited = new boolean[n+1];
+        adj = new LinkedList[n+1];
+
+        for(int i=0; i<=n; i++) {
+            adj[i] = new LinkedList<Integer>();
         }
-        
+
+        for(int i=0; i<m; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+
+            adj[u].add(v);
+            adj[v].add(u);
+        }
+
         dfs(1);
         System.out.println(cnt);
-        
-	}
+    }
 
-	private static void dfs(int i) {
-		isVisited[i] = true;
-		
-		for(int j=1; j<=n; j++) {
-			if(adjMatrix[i][j] == 1 && isVisited[j] ==false) {
-				cnt++;
-				dfs(j);
-			}
-		}
-	
-	}  
+    private static void dfs(int i) {
+        visited[i] = true;
+
+        for(int k: adj[i]) {
+            if(!visited[k]) {
+                cnt++;
+                dfs(k);
+            }
+        }
+    }
+
+
+
 }
-
-
-
 
