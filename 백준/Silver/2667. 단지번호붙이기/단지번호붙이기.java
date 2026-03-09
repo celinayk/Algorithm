@@ -1,77 +1,70 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
+
 
 public class Main {
-	static int[][] adjMatrix;
-	static boolean[][] isVisited;
-	static int[] arr;
-	static int cnt,n;;
-	static int[] dx = {-1,1,0,0};
-	static int[] dy = {0,0,-1,1};
+    static int n;
+    static int cnt=0;
+    static boolean[][] visited;
+    static int[][] adj;
+    static int[] dx = {-1,1,0,0};
+    static int[] dy = {0,0,-1,1};
+    static LinkedList<Integer> ans;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
-        
-        n = Integer.parseInt(br.readLine()); 
-        
-        adjMatrix = new int[n][n];
-        isVisited = new boolean[n][n];
-        
-        StringTokenizer st;
-        
-        for(int i=0; i<n; i++) {
-        	String line = br.readLine();
-        	for(int j=0; j<n; j++) {		
-        		adjMatrix[i][j] = line.charAt(j)- '0';
-        	}			
+        // 배열 초기화
+        visited = new boolean[n][n];
+        adj = new int[n][n];
+        ans = new LinkedList<Integer>();
+
+        // 단지 입력 받기
+        for(int i = 0; i < n; i++) {
+            String line = br.readLine();
+            for(int j = 0; j < n; j++) {
+                adj[i][j] = line.charAt(j) - '0';
+            }
         }
-        
-        List<Integer> sizes = new ArrayList<>();
-        
-        for(int i=0; i<n; i++) {
-        	for(int j=0; j<n; j++) {
-        		if(adjMatrix[i][j] == 1 && !isVisited[i][j]) {
-        			cnt=0;
-        			dfs(i,j);
-        			 sizes.add(cnt);
-        		}
-        	}
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(adj[i][j] == 1 && !visited[i][j]) {
+                    cnt = 1;
+                    ans.add(dfs(i,j));
+                }
+            }
         }
-        
-        Collections.sort(sizes); 
-        System.out.println(sizes.size());
-        for(int k : sizes) {
-        	System.out.println(k + " ");
+
+        System.out.println(ans.size());
+
+        for(int i=0; i<ans.size(); i++) {
+            Collections.sort(ans);
+            System.out.println(ans.get(i));
         }
-       
-        
+
     }
-    
-    private static void dfs(int x, int y) {
-    	isVisited[x][y] = true;
-    	cnt++;
-    	
-    	for(int i=0; i<4; i++) {
-    		int nx = x + dx[i];
-    		int ny = y + dy[i];
-    		if(nx>=0 && ny>=0 && nx<n && ny<n ) {
-    			if(adjMatrix[nx][ny] == 1 && !isVisited[nx][ny]) {
-    				dfs(nx,ny);
-    			}
-    		}
-    	}
+
+    private static int dfs(int x, int y) {
+        visited[x][y] = true;
+
+        for(int k=0; k<4; k++) {
+            int nx = x + dx[k];
+            int ny = y + dy[k];
+
+            if(nx>=0 && ny>=0 && nx<n && ny<n) {
+                if(!visited[nx][ny] && adj[nx][ny]==1) {
+                    cnt++; // 각 단지에 속하는 집의 수
+                    dfs(nx, ny);
+                }
+            }
+        }
+        return cnt;
     }
-	
+
+
+
+
 }
 
