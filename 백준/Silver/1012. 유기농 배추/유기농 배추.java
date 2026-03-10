@@ -1,85 +1,68 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
+
 
 public class Main {
-	static int[][] adjMatrix;
-	static int n,m,k=0;
-	static boolean[][] isVisited;
-	static int[] dx = {0,0,-1,1};
-	static int[] dy = {-1,1,0,0};
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));	
-             
-        int t = Integer.parseInt(br.readLine());
-        StringTokenizer st;
-        StringBuilder sb = new StringBuilder();
+    static int t,n,m,k;
+    static int cnt=0;
+    static boolean[][] visited;
+    static int[][] adj;
+    static int[] dx = {-1,1,0,0};
+    static int[] dy = {0,0,-1,1};
+    public static void main(String[] args) throws Exception {
+       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+       t = Integer.parseInt(br.readLine());
 
-        
-        for(int i=0; i<t; i++) {
-        	st = new StringTokenizer(br.readLine(), " ");
-        	
-        	n = Integer.parseInt(st.nextToken());
-        	m = Integer.parseInt(st.nextToken());
-        	k = Integer.parseInt(st.nextToken());
-        	
-        	isVisited = new boolean[n][m];
-            adjMatrix = new int[n][m];
-             
-             
-             // 배추 입력받기 
-            for(int j=0; j<k; j++) {
-             	st = new StringTokenizer(br.readLine());
-             	int x = Integer.parseInt(st.nextToken());
-             	int y = Integer.parseInt(st.nextToken());
-             	adjMatrix[x][y] = 1;
-             }
-             
-             int cnt = 0;
-             for(int k=0; k<n; k++) {
-            	 for(int j=0; j<m; j++) {
-            		 if(adjMatrix[k][j] == 1 && !isVisited[k][j]) {
-            			 dfs(k,j);
-            			 cnt++;
-            		 }
-            	 }
-            	 
-             }  	
-             sb.append(cnt).append("\n");
+       // 테스트 케이스 개수만큼 루프
+       for(int i = 0; i < t; i++) {
+           StringTokenizer st = new StringTokenizer(br.readLine());
+           n = Integer.parseInt(st.nextToken()); // 10
+           m = Integer.parseInt(st.nextToken()); // 8
+           k = Integer.parseInt(st.nextToken()); // 17
+           //배열 초기화
+           visited = new boolean[m][n]; //8행 10열
+           adj = new int[m][n];
+
+           for(int j=0; j<k; j++) {
+               st = new StringTokenizer(br.readLine());
+               int u  = Integer.parseInt(st.nextToken()); //열
+               int v = Integer.parseInt(st.nextToken()); //행
+               adj[v][u] = 1;
+           }
+
+
+           cnt = 0;
+           // dfs수행
+           for(int x=0; x<n; x++) {
+               for(int y=0; y<m; y++) {
+                   if(!visited[y][x] && adj[y][x] == 1) {
+                       dfs(y,x);
+                       cnt++;
+                   }
+               }
+
+           }
+           System.out.println(cnt);
+       }
+
+    }
+
+    private static void dfs(int x, int y) {
+        visited[x][y] = true;
+
+        for(int i=0; i<4; i++) {
+            int nx =  x + dx[i];
+            int ny = y + dy[i];
+
+            if(nx>=0 && ny>=0 && nx<m && ny<n) {
+                if(adj[nx][ny]==1 && !visited[nx][ny]) {
+                    dfs(nx, ny);
+                }
+            }
         }
 
-         System.out.println(sb);
-	
-	}
-    
-	private static void dfs(int x, int y) {
-		isVisited[x][y] = true;
-		
-		//상하좌우로 인접 위치 탐색 
-		for(int i=0; i<4; i++) {
-			int nx = x+dx[i];
-			int ny = y+dy[i];
-			
-			if(nx>=0 && ny>=0 && nx < n && ny < m) {
-				if(adjMatrix[nx][ny]==1 && !isVisited[nx][ny]) {
-					dfs(nx,ny);
-				}
-			}
-		}
-		
-		
-		
-	}
 
-
+    }
 }
+
