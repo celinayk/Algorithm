@@ -1,86 +1,93 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.*;
 import java.util.*;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import static java.lang.Long.MAX_VALUE;
 
 public class Main {
-    static int m,n,h,day;
-    static int[][][] arr;
+    static int n,m,h;
     static boolean[][][] visited;
-    static Queue<int[]> q = new LinkedList<>();
-    static int[] dx = {-1,1,0,0,0,0};
-    static int[] dy = {0,0,-1,1,0,0};
-    static int[] dz = {0,0,0,0,1,-1};
+    static int ans = 0;
+    static int[][][] adj;
+    static int cnt = 0;
+    static int[] dx = {-1, 1, 0, 0, 0,0};
+    static int[] dy = {0, 0, -1, 1,0,0};
+    static int[] dz = {0,0,0,0,-1,1};
+    static Queue<int[]> q;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st =  new StringTokenizer(br.readLine());
-
-        m =  Integer.parseInt(st.nextToken());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        m = Integer.parseInt(st.nextToken());
         n = Integer.parseInt(st.nextToken());
         h = Integer.parseInt(st.nextToken());
-        arr = new int[h][n][m];
-        visited = new boolean[h][n][m];
 
-        for (int z = 0; z < h; z++) {
-            for (int y = 0; y < n; y++) {
+        visited = new boolean[n][m][h];
+        adj = new int[n][m][h];
+        q = new LinkedList<>();
+
+        for(int k=0; k<h; k++) {
+            for (int i = 0; i < n; i++) {
                 st = new StringTokenizer(br.readLine());
-                for (int x = 0; x < m; x++) {
-                    arr[z][y][x] = Integer.parseInt(st.nextToken());
-                    if (arr[z][y][x] == 1) {
-                        q.add(new int[]{z, y, x}); // 큐에도 (z,y,x) 순서로
-                        visited[z][y][x] = true;
+                for(int j = 0; j < m; j++) {
+                    adj[i][j][k] = Integer.parseInt(st.nextToken());
+                    if(adj[i][j][k] == 1) {
+                        q.add(new int[]{i, j, k});
                     }
                 }
             }
         }
-
 
         System.out.println(bfs());
 
     }
 
-    private static int bfs() {
+    static int bfs () {
         while(!q.isEmpty()) {
-            int[] now = q.poll();
-            int z = now[0];
-            int y = now[1];
-            int x = now[2];
+            int[] tmp = q.poll();
+            int cx = tmp[0];
+            int cy = tmp[1];
+            int cz = tmp[2];
 
             for(int i=0; i<6; i++) {
-                int nz = z+dz[i];
-                int nx = x+dx[i];
-                int ny = y+dy[i];
+                int nx = cx + dx[i];
+                int ny = cy + dy[i];
+                int nz = cz + dz[i];
 
-                if(nx>=0 && nx<m && ny>=0 && ny<n && nz>=0 && nz<h) {
-                    if(arr[nz][ny][nx] == 0 && !visited[nz][ny][nx]) {
-                        visited[nz][ny][nx]= true;
-                        q.add(new int[]{nz,ny,nx});
-                        arr[nz][ny][nx] =arr[z][y][x]+1;
+                if(nx>=0 && ny>=0 && nz>=0 && nx<n && ny<m && nz<h) {
+                    if(!visited[nx][ny][nz] && adj[nx][ny][nz]==0) {
+                        q.add(new int[]{nx, ny, nz});
+                        visited[nx][ny][nz] = true;
+                        adj[nx][ny][nz] = adj[cx][cy][cz] + 1; // 날짜 세기
                     }
                 }
             }
         }
 
-        for(int z=0; z<h; z++) {
-            for(int y=0; y<n; y++) {
-                for(int x=0; x<m; x++) {
-                    if(arr[z][y][x]==0) {
+        for(int k=0; k<h; k++) {
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    if(adj[i][j][k]==0) {
                         return -1;
                     }
-                    day = Math.max(day, arr[z][y][x]);
+                    ans = Math.max(ans, adj[i][j][k]);
                 }
             }
         }
-        if(day==1) {
+
+        if(ans ==1) {
             return 0;
         } else {
-            return day-1;
+            return ans-1;
         }
+
+
+
+
+
+
+
+
     }
+
 
 
 }
