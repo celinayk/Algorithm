@@ -4,49 +4,43 @@ import java.util.*;
 
 
 public class Main {
-    public static boolean[][] visited;
-    public static int[][] map;
-    public static int N;
-    public static StringBuilder sb = new StringBuilder();
+    static int n;
+    static int[][] arr;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        n = Integer.parseInt(br.readLine());
 
-        N = Integer.parseInt(br.readLine());
-        map = new int[N+1][N+1];
+        arr = new int[n+1][n+1];
 
-        for (int i = 1; i <= N; i++){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= N; j++){
-                map[i][j] = Integer.parseInt(st.nextToken());
+        for(int i = 1; i <=n; i++) {
+            st = new StringTokenizer(br.readLine());
+            for(int j=1; j<=n; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        for (int i = 1; i <= N; i++){
-            BFS(i);
-        }
-
-        System.out.print(sb);
-    }
-
-    public static void BFS(int node){
-        boolean[] visited = new boolean[N+1];
-        Queue<Integer> q = new LinkedList<>();
-
-        q.add(node);
-        while (!q.isEmpty()){
-            int curr = q.poll();
-            for (int i = 1; i <= N; i++){
-                if (!visited[i] && map[curr][i] == 1){
-                    q.add(i);
-                    visited[i] = true;
+        for(int k=1; k<=n; k++) {
+            for(int i=1; i<=n; i++) {
+                for(int j=1; j<=n; j++) {
+                    if(arr[i][k]==1 && arr[k][j]==1) {
+                        arr[i][j] = 1;
+                    }
                 }
             }
         }
-        for (int i = 1; i <= N; i++){
-            if (visited[i]) sb.append("1 ");
-            else sb.append("0 ");
+
+        StringBuilder sb = new StringBuilder();
+        for(int i=1; i<=n; i++) {
+            for(int j=1; j<=n; j++) {
+                sb.append(arr[i][j]+ " ");
+            }
+            sb.append("\n");
         }
-        sb.append("\n");
+        System.out.println(sb);
+
+
+
     }
 
 }
